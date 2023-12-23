@@ -1,15 +1,19 @@
 <script>
 	import { researchTree } from '$lib/research_data.js';
-
+	import { researchTreeStore } from '$lib/stores.js';
 	import { onMount, onDestroy } from 'svelte';
+	import 'iconify-icon';
+
+	$: researchTreeStore.set(researchTree);
 
 	let projectElements = {};
 	let lines = [];
 	let modalContent = null;
+	let sidebarExpanded = true;
 
 	function updateLines() {
 		lines = [];
-		researchTree.forEach((project) => {
+		$researchTreeStore.forEach((project) => {
 			const startElement = projectElements[project.title];
 			if (startElement) {
 				project.leads_to.forEach((dependentTitle) => {
@@ -42,7 +46,7 @@
 		}
 	});
 	// Group projects by branch and then by tier
-	const branches = researchTree.reduce((acc, project) => {
+	$: branches = $researchTreeStore.reduce((acc, project) => {
 		if (!acc[project.branch]) {
 			acc[project.branch] = {};
 		}
@@ -56,7 +60,7 @@
 
 	const isUnlocked = (project) => {
 		return project.depends_on?.every(
-			(dependency) => researchTree.find((p) => p.title === dependency)?.completed
+			(dependency) => $researchTreeStore.find((p) => p.title === dependency)?.completed
 		);
 	};
 
@@ -67,29 +71,98 @@
 	function hideProjectModal() {
 		modalContent = null;
 	}
+
+	function uncompleteDependentProjects(projectTitle, currentTree) {
+		currentTree.forEach((project) => {
+			if (project.depends_on.includes(projectTitle) && project.completed) {
+				project.completed = false; // Uncomplete the dependent project
+				uncompleteDependentProjects(project.title, currentTree); // Recursive call for further dependencies
+			}
+		});
+	}
+
+	function isProjectUnlocked(project) {
+		return project.depends_on?.every(
+			(dependency) => $researchTreeStore.find((p) => p.title === dependency)?.completed
+		);
+	}
+
+	function toggleProjectStatus(projectTitle) {
+		researchTreeStore.update((currentTree) => {
+			return currentTree.map((project) => {
+				if (project.title === projectTitle) {
+					// Check if the project is unlocked and not completed before toggling
+					if (!project.completed && !isProjectUnlocked(project)) {
+						return project; // Do not change the status if the project is locked
+					}
+					const newCompletedStatus = !project.completed;
+					if (!newCompletedStatus) {
+						uncompleteDependentProjects(projectTitle, currentTree);
+					}
+					return { ...project, completed: newCompletedStatus };
+				}
+				return project;
+			});
+		});
+	}
+
+	$: tierCompletionStatus = $researchTreeStore.reduce((acc, project) => {
+		const { branch, tier, completed } = project;
+
+		if (!acc[branch]) {
+			acc[branch] = {};
+		}
+		if (acc[branch][tier] === undefined) {
+			acc[branch][tier] = true; // Assume completed, will be falsified if any project is not completed
+		}
+
+		acc[branch][tier] = acc[branch][tier] && completed;
+		return acc;
+	}, {});
+
+	$: totalPointsSpent = $researchTreeStore.reduce((total, project) => {
+		if (project.completed) {
+			return total + project.cost;
+		}
+		return total;
+	}, 0);
 </script>
 
 <div class="main-container">
 	<h1>Research Branches</h1>
+	<div class="points-spent">
+		<iconify-icon icon="material-symbols:experiment-outline"></iconify-icon>
+		{totalPointsSpent}
+	</div>
 	<div class="research-container">
 		{#each Object.entries(branches) as [branchName, tiers]}
 			<div class={`branch ${branchName}`}>
 				<h2>{branchName}</h2>
 				{#each Object.entries(tiers) as [tierName, projects]}
-					<div class={`tier ${tierName}`}>
+					<div
+						class={`tier ${tierName} ${
+							tierCompletionStatus[branchName] && tierCompletionStatus[branchName][tierName]
+								? 'tier-complete'
+								: ''
+						}`}
+					>
 						<h3>{tierName}</h3>
 						<div class="tier-group">
 							{#each projects as project}
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
 								<div
 									role="button"
 									tabindex="0"
 									class={`research-item ${isUnlocked(project) ? '' : 'locked'} ${
 										project.completed ? 'completed' : ''
 									}`}
+									on:click={() => toggleProjectStatus(project.title)}
 									on:mouseover={() => showProjectModal(project)}
 									on:mouseleave={hideProjectModal}
 									on:focus={() => showProjectModal(project)}
 								>
+									<!-- svelte-ignore a11y-click-events-have-key-events -->
+									<!-- svelte-ignore a11y-no-static-element-interactions -->
 									<div bind:this={projectElements[project.title]} class="project-sphere"></div>
 									<div class="title">{project.title}</div>
 								</div>
@@ -101,75 +174,87 @@
 		{/each}
 	</div>
 </div>
-{#if modalContent}
-	<button class="modal-overlay" on:click={hideProjectModal} tabindex="0">
-		<div class="modal">
-			<h2>{modalContent.title}</h2>
-			<div>
-				<table>
-					<tbody>
-						{#if modalContent.description}
-							<tr>
-								<td><strong>Description:</strong></td>
-								<td>{modalContent.description}</td>
-							</tr>
-						{/if}
-						{#if modalContent.tier}
-							<tr>
-								<td><strong>Tier:</strong></td>
-								<td>{modalContent.tier}</td>
-							</tr>
-						{/if}
-						{#if modalContent.branch}
-							<tr>
-								<td><strong>Branch:</strong></td>
-								<td>{modalContent.branch}</td>
-							</tr>
-						{/if}
-						{#if modalContent.cost}
-							<tr>
-								<td><strong>Cost:</strong></td>
-								<td>{modalContent.cost} Research Points</td>
-							</tr>
-						{/if}
-						{#if modalContent.duration}
-							<tr>
-								<td><strong>Duration:</strong></td>
-								<td>{modalContent.duration} turns</td>
-							</tr>
-						{/if}
-						<tr>
-							<td><strong>Completed:</strong></td>
-							<td>{modalContent.completed ? 'Yes' : 'No'}</td>
-						</tr>
-						{#if Object.keys(modalContent.depends_on).length > 0}
-							<tr>
-								<td><strong>Depends on:</strong></td>
-								<td>{modalContent.depends_on.join(', ')}</td>
-							</tr>
-						{/if}
-						{#if Object.keys(modalContent.leads_to).length > 0}
-							<tr>
-								<td><strong>Leads to:</strong></td>
-								<td>{modalContent.leads_to.join(', ')}</td>
-							</tr>
-						{/if}
-						{#if Object.keys(modalContent.unlocks).length > 0}
-							<tr>
-								<td><strong>Unlocks:</strong></td>
-								<td>
-									{#each Object.entries(modalContent.unlocks) as [key, value]}
-										{value} ({key})
-									{/each}
-								</td>
-							</tr>
-						{/if}
-					</tbody>
-				</table>
-			</div>
-		</div></button
-	>
-{/if}
+
+<button on:click={() => (sidebarExpanded = !sidebarExpanded)}>
+	<div class="sidebar" class:collapsed={!sidebarExpanded}>
+		<div class="sidebar-content">
+			<h2>Research Summary</h2>
+			<p>Total Points Spent: {totalPointsSpent}</p>
+			<p>Used Turns: asd</p>
+			<p>Unlocked Items: asd</p>
+
+			{#if modalContent}
+				<div class="modal-overlay">
+					<div class="modal">
+						<h2>{modalContent.title}</h2>
+						<div>
+							<table>
+								<tbody>
+									{#if modalContent.description}
+										<tr>
+											<td><strong>Description:</strong></td>
+											<td>{modalContent.description}</td>
+										</tr>
+									{/if}
+									{#if modalContent.tier}
+										<tr>
+											<td><strong>Tier:</strong></td>
+											<td>{modalContent.tier}</td>
+										</tr>
+									{/if}
+									{#if modalContent.branch}
+										<tr>
+											<td><strong>Branch:</strong></td>
+											<td>{modalContent.branch}</td>
+										</tr>
+									{/if}
+									{#if modalContent.cost}
+										<tr>
+											<td><strong>Cost:</strong></td>
+											<td>{modalContent.cost} Research Points</td>
+										</tr>
+									{/if}
+									{#if modalContent.duration}
+										<tr>
+											<td><strong>Duration:</strong></td>
+											<td>{modalContent.duration} turns</td>
+										</tr>
+									{/if}
+									<tr>
+										<td><strong>Completed:</strong></td>
+										<td>{modalContent.completed ? 'Yes' : 'No'}</td>
+									</tr>
+									{#if Object.keys(modalContent.depends_on).length > 0}
+										<tr>
+											<td><strong>Depends on:</strong></td>
+											<td>{modalContent.depends_on.join(', ')}</td>
+										</tr>
+									{/if}
+									{#if Object.keys(modalContent.leads_to).length > 0}
+										<tr>
+											<td><strong>Leads to:</strong></td>
+											<td>{modalContent.leads_to.join(', ')}</td>
+										</tr>
+									{/if}
+									{#if Object.keys(modalContent.unlocks).length > 0}
+										<tr>
+											<td><strong>Unlocks:</strong></td>
+											<td>
+												{#each Object.entries(modalContent.unlocks) as [key, value]}
+													{value} ({key})
+												{/each}
+											</td>
+										</tr>
+									{/if}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+</button>
 
 <!-- <svg
 	class="lines-container"
@@ -195,11 +280,21 @@
 
 		padding-top: 1rem;
 		color: #ccc;
+		display: flex;
+		flex-direction: column;
+	}
+	.points-spent {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		font-size: 1.5rem;
 	}
 	.lines-container {
 		z-index: 1;
 	}
 	.research-container {
+		flex-grow: 1;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
@@ -211,6 +306,36 @@
 		color: #fff;
 		padding: 1rem;
 	}
+
+	.sidebar {
+		width: 500px;
+		background-color: #1a1a1a;
+		color: #ccc;
+		border-left: 1px solid #444;
+		padding: 20px;
+		transition: transform 0.2s ease-in-out;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		box-sizing: border-box;
+		z-index: 2;
+		cursor: pointer;
+	}
+
+	.sidebar.collapsed {
+		transform: translateX(90%);
+		/* padding: 0; */
+		overflow: hidden;
+	}
+	.sidebar.collapsed:hover {
+		transform: translateX(88%);
+	}
+
+	.sidebar-content {
+		display: block;
+	}
+
 	h1 {
 		text-align: center;
 		font-size: 2rem;
@@ -242,6 +367,9 @@
 		border-radius: 1rem;
 		padding: 0.5rem;
 	}
+	.tier-complete {
+		background-color: rgba(138, 215, 215, 0.106);
+	}
 	.tier-group {
 		display: flex;
 		justify-content: center;
@@ -251,7 +379,7 @@
 	.research-item {
 		position: relative;
 		margin: 1em 0;
-		padding: 1em;
+		padding: 1em 0.5rem;
 		border-radius: 4px;
 		/* background-color: rgb(138, 215, 215); */
 		color: #eee;
@@ -276,11 +404,12 @@
 		border-color: rgb(138, 215, 215);
 	}
 	.modal-overlay {
-		position: fixed;
+		/* position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 100%;
+		height: 100%; */
+		color: #111;
 		font-family: 'Young Serif', serif;
 		background-color: rgba(0, 0, 0, 0);
 		border-color: transparent;
@@ -288,10 +417,11 @@
 		justify-content: center;
 		align-items: center;
 		z-index: 3;
-		pointer-events: none;
 	}
 
 	.modal {
+		position: relative;
+		font-size: 0.8rem;
 		background-color: rgb(182, 228, 228);
 		padding: 2rem;
 		border-radius: 1rem;
@@ -300,6 +430,7 @@
 		max-width: 500px; /* Adjust as needed */
 		text-align: left;
 	}
+
 	.modal h2 {
 		text-align: center;
 	}
@@ -342,5 +473,32 @@
 		margin-top: 0.5em;
 		font-size: 0.9em;
 		color: #333;
+	}
+
+	/* Responsive Styles */
+	@media (max-width: 768px) {
+		.branch {
+			min-width: 100%;
+		}
+		.tier-group {
+			flex-wrap: wrap;
+		}
+		.research-item {
+			margin: 0.5em;
+		}
+		.sidebar {
+			width: auto;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			border-top: 1px solid #444;
+		}
+
+		.sidebar.collapsed {
+			transform: translateY(95%);
+		}
+		.sidebar.collapsed:hover {
+			transform: translateY(92%);
+		}
 	}
 </style>
