@@ -69,36 +69,38 @@
 	}
 </script>
 
-<div class="research-container">
-	{#each Object.entries(branches) as [branchName, tiers]}
-		<div class={`branch ${branchName}`}>
-			<h2>{branchName}</h2>
-			{#each Object.entries(tiers) as [tierName, projects]}
-				<div class={`tier ${tierName}`}>
-					<h3>{tierName}</h3>
-					<div class="tier-group">
-						{#each projects as project}
-							<div
-								role="button"
-								tabindex="0"
-								class={`research-item ${isUnlocked(project) ? '' : 'locked'} ${
-									project.completed ? 'completed' : ''
-								}`}
-								on:mouseover={() => showProjectModal(project)}
-								on:mouseleave={hideProjectModal}
-								on:focus={() => showProjectModal(project.title)}
-							>
-								<div bind:this={projectElements[project.title]} class="project-sphere"></div>
-								<div class="title">{project.title}</div>
-							</div>
-						{/each}
+<div class="main-container">
+	<h1>Research Branches</h1>
+	<div class="research-container">
+		{#each Object.entries(branches) as [branchName, tiers]}
+			<div class={`branch ${branchName}`}>
+				<h2>{branchName}</h2>
+				{#each Object.entries(tiers) as [tierName, projects]}
+					<div class={`tier ${tierName}`}>
+						<h3>{tierName}</h3>
+						<div class="tier-group">
+							{#each projects as project}
+								<div
+									role="button"
+									tabindex="0"
+									class={`research-item ${isUnlocked(project) ? '' : 'locked'} ${
+										project.completed ? 'completed' : ''
+									}`}
+									on:mouseover={() => showProjectModal(project)}
+									on:mouseleave={hideProjectModal}
+									on:focus={() => showProjectModal(project.title)}
+								>
+									<div bind:this={projectElements[project.title]} class="project-sphere"></div>
+									<div class="title">{project.title}</div>
+								</div>
+							{/each}
+						</div>
 					</div>
-				</div>
-			{/each}
-		</div>
-	{/each}
+				{/each}
+			</div>
+		{/each}
+	</div>
 </div>
-
 {#if modalContent}
 	<button class="modal-overlay" on:click={hideProjectModal} tabindex="0">
 		<div class="modal">
@@ -187,6 +189,13 @@
 </svg> -->
 
 <style>
+	.main-container {
+		font-family: 'Young Serif', serif;
+		background-color: #1a1a1a;
+
+		padding-top: 1rem;
+		color: #ccc;
+	}
 	.lines-container {
 		z-index: 1;
 	}
@@ -197,11 +206,15 @@
 		/* gap: 1rem; */
 		text-align: center;
 		/* flex-direction: column; */
-		font-family: 'Young Serif', serif;
-		background-color: #1a1a1a;
+
 		overflow-x: auto;
 		color: #fff;
 		padding: 1rem;
+	}
+	h1 {
+		text-align: center;
+		font-size: 2rem;
+		margin: 0 0 1rem;
 	}
 	h2 {
 		text-transform: capitalize;
@@ -304,7 +317,7 @@
 	}
 
 	.modal table tr:nth-child(even) {
-		background-color: rgba(255, 255, 255, 0.4);
+		background-color: rgba(138, 215, 215, 0.506);
 	}
 
 	.research-item .project-sphere {
