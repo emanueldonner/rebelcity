@@ -1,137 +1,5 @@
 export const researchTree = [
 	{
-		title: 'Urban Survival Skills',
-		tier: 'basic',
-		branch: 'survival',
-		depends_on: [],
-		description: 'Learn essential survival skills for urban environments.',
-		cost: 5,
-		duration: 2,
-		completed: true,
-		leads_to: ['Advanced First Aid', 'Safehouse Security'],
-		unlocks: {}
-	},
-	{
-		title: 'Advanced First Aid',
-		tier: 'intermediate',
-		branch: 'survival',
-		depends_on: ['Urban Survival Skills'],
-		description: 'Enhance medical skills to treat injuries effectively.',
-		cost: 10,
-		duration: 3,
-		completed: false,
-		leads_to: ['Emergency Medical Response'],
-		unlocks: { item: 'Field Medicine Kit' }
-	},
-	{
-		title: 'Safehouse Security',
-		tier: 'intermediate',
-		branch: 'survival',
-		depends_on: ['Urban Survival Skills'],
-		description: 'Improve the security of your base to avoid detection and raids.',
-		cost: 8,
-		duration: 3,
-		completed: false,
-		leads_to: ['Counter-Surveillance Techniques'],
-		unlocks: { facility: 'Enhanced Security Systems' }
-	},
-	{
-		title: 'Emergency Medical Response',
-		tier: 'advanced',
-		branch: 'survival',
-		depends_on: ['Advanced First Aid'],
-		description: 'Prepare for and manage medical emergencies.',
-		cost: 15,
-		duration: 4,
-		completed: false,
-		leads_to: [],
-		unlocks: { facility: 'Mobile Medical Unit' }
-	},
-	{
-		title: 'Counter-Surveillance Techniques',
-		tier: 'advanced',
-		branch: 'survival',
-		depends_on: ['Safehouse Security'],
-		description: 'Learn advanced methods to evade and counteract surveillance.',
-		cost: 12,
-		duration: 4,
-		completed: false,
-		leads_to: [],
-		unlocks: { technique: 'Stealth Operations' }
-	},
-	{
-		title: 'Basic Encryption Techniques',
-		tier: 'basic',
-		branch: 'technology',
-		description: 'Learn fundamental encryption methods to secure communications.',
-		cost: 6,
-		duration: 2,
-		completed: false,
-		depends_on: [],
-		leads_to: ['Cybersecurity', 'Secure Communication'],
-		unlocks: {}
-	},
-	{
-		title: 'Cybersecurity',
-		tier: 'intermediate',
-		branch: 'technology',
-		description: 'Develop advanced cybersecurity measures to protect sensitive data.',
-		cost: 12,
-		duration: 4,
-		completed: false,
-		depends_on: ['Basic Encryption Techniques'],
-		leads_to: ['Advanced Hacking'],
-		unlocks: { technique: 'Data Encryption' }
-	},
-	{
-		title: 'Secure Communication',
-		tier: 'intermediate',
-		branch: 'technology',
-		description: 'Implement secure communication channels to avoid interception.',
-		cost: 10,
-		duration: 3,
-		completed: false,
-		depends_on: ['Basic Encryption Techniques'],
-		leads_to: ['Network Infiltration'],
-		unlocks: { item: 'Encrypted Communication Devices' }
-	},
-	{
-		title: 'Advanced Hacking',
-		tier: 'advanced',
-		branch: 'technology',
-		description: 'Gain the ability to infiltrate high-level security systems.',
-		cost: 15,
-		duration: 5,
-		completed: false,
-		depends_on: ['Cybersecurity'],
-		leads_to: ['Digital Counterintelligence'],
-		unlocks: { technique: 'System Sabotage' }
-	},
-	{
-		title: 'Network Infiltration',
-		tier: 'advanced',
-		branch: 'technology',
-		description: 'Learn techniques for penetrating and analyzing complex networks.',
-		cost: 18,
-		duration: 5,
-		completed: false,
-		depends_on: ['Secure Communication'],
-		leads_to: [],
-		unlocks: { event: 'Data Leak Operations' }
-	},
-	{
-		title: 'Digital Counterintelligence',
-		tier: 'advanced',
-		branch: 'technology',
-		description: 'Master methods to counter digital espionage and misinformation.',
-		cost: 20,
-		duration: 6,
-		completed: false,
-		depends_on: ['Advanced Hacking'],
-		leads_to: [],
-		unlocks: { technique: 'Misinformation Campaigns' }
-	},
-	{
 		title: 'Community Support Initiatives',
 		tier: 'basic',
 		branch: 'community',
@@ -222,6 +90,190 @@ export const researchTree = [
 		unlocks: { program: 'Nutritional Workshops' }
 	},
 	{
+		title: 'Holistic Mental Health Network',
+		tier: 'expert',
+		branch: 'community',
+		description:
+			'Establish a comprehensive mental health network that integrates holistic wellness practices, community support systems, and advanced therapeutic techniques.',
+		cost: 18,
+		duration: 5,
+		completed: false,
+		depends_on: ['Counseling Services', 'Stress Management Workshops'],
+		leads_to: [],
+		unlocks: { program: 'Community Wellness Initiatives' }
+	},
+	{
+		title: 'Sustainable Community Ecosystems',
+		tier: 'expert',
+		branch: 'community',
+		description:
+			'Develop self-sustaining community ecosystems that thrive on cooperative economics, social equity, and environmental stewardship.',
+		cost: 20,
+		duration: 6,
+		completed: false,
+		depends_on: ['Community Gardens', 'Nutritional Education Programs'],
+		leads_to: [],
+		unlocks: { concept: 'Cooperative Community Models' }
+	},
+	{
+		title: 'Urban Survival Skills',
+		tier: 'basic',
+		branch: 'survival',
+		depends_on: [],
+		description: 'Learn essential survival skills for urban environments.',
+		cost: 5,
+		duration: 2,
+		completed: true,
+		leads_to: ['Advanced First Aid', 'Safehouse Security'],
+		unlocks: {}
+	},
+	{
+		title: 'Advanced First Aid',
+		tier: 'intermediate',
+		branch: 'survival',
+		depends_on: ['Urban Survival Skills'],
+		description: 'Enhance medical skills to treat injuries effectively.',
+		cost: 10,
+		duration: 3,
+		completed: false,
+		leads_to: ['Emergency Medical Response'],
+		unlocks: { item: 'Field Medicine Kit' }
+	},
+	{
+		title: 'Safehouse Security',
+		tier: 'intermediate',
+		branch: 'survival',
+		depends_on: ['Urban Survival Skills'],
+		description: 'Improve the security of your base to avoid detection and raids.',
+		cost: 8,
+		duration: 3,
+		completed: false,
+		leads_to: ['Counter-Surveillance Techniques'],
+		unlocks: { facility: 'Enhanced Security Systems' }
+	},
+	{
+		title: 'Emergency Medical Response',
+		tier: 'advanced',
+		branch: 'survival',
+		depends_on: ['Advanced First Aid'],
+		description: 'Prepare for and manage medical emergencies.',
+		cost: 15,
+		duration: 4,
+		completed: false,
+		leads_to: [],
+		unlocks: { facility: 'Mobile Medical Unit' }
+	},
+	{
+		title: 'Counter-Surveillance Techniques',
+		tier: 'advanced',
+		branch: 'survival',
+		depends_on: ['Safehouse Security'],
+		description: 'Learn advanced methods to evade and counteract surveillance.',
+		cost: 12,
+		duration: 4,
+		completed: false,
+		leads_to: [],
+		unlocks: { technique: 'Stealth Operations' }
+	},
+	{
+		title: 'Urban Resilience Mastery',
+		tier: 'expert',
+		branch: 'survival',
+		description:
+			'Achieve mastery in urban resilience, preparing for and adapting to various urban challenges and crises.',
+		cost: 20,
+		duration: 6,
+		completed: false,
+		depends_on: ['Emergency Medical Response', 'Safehouse Security'],
+		leads_to: [],
+		unlocks: { strategy: 'Urban Resilience Planning' }
+	},
+	{
+		title: 'Basic Encryption Techniques',
+		tier: 'basic',
+		branch: 'technology',
+		description: 'Learn fundamental encryption methods to secure communications.',
+		cost: 6,
+		duration: 2,
+		completed: false,
+		depends_on: [],
+		leads_to: ['Cybersecurity', 'Secure Communication'],
+		unlocks: {}
+	},
+	{
+		title: 'Cybersecurity',
+		tier: 'intermediate',
+		branch: 'technology',
+		description: 'Develop advanced cybersecurity measures to protect sensitive data.',
+		cost: 12,
+		duration: 4,
+		completed: false,
+		depends_on: ['Basic Encryption Techniques'],
+		leads_to: ['Advanced Hacking'],
+		unlocks: { technique: 'Data Encryption' }
+	},
+	{
+		title: 'Secure Communication',
+		tier: 'intermediate',
+		branch: 'technology',
+		description: 'Implement secure communication channels to avoid interception.',
+		cost: 10,
+		duration: 3,
+		completed: false,
+		depends_on: ['Basic Encryption Techniques'],
+		leads_to: ['Network Infiltration'],
+		unlocks: { item: 'Encrypted Communication Devices' }
+	},
+	{
+		title: 'Advanced Hacking',
+		tier: 'advanced',
+		branch: 'technology',
+		description: 'Gain the ability to infiltrate high-level security systems.',
+		cost: 15,
+		duration: 5,
+		completed: false,
+		depends_on: ['Cybersecurity'],
+		leads_to: ['Digital Counterintelligence'],
+		unlocks: { technique: 'System Sabotage' }
+	},
+	{
+		title: 'Network Infiltration',
+		tier: 'advanced',
+		branch: 'technology',
+		description: 'Learn techniques for penetrating and analyzing complex networks.',
+		cost: 18,
+		duration: 5,
+		completed: false,
+		depends_on: ['Secure Communication'],
+		leads_to: [],
+		unlocks: { event: 'Data Leak Operations' }
+	},
+	{
+		title: 'Digital Counterintelligence',
+		tier: 'advanced',
+		branch: 'technology',
+		description: 'Master methods to counter digital espionage and misinformation.',
+		cost: 20,
+		duration: 6,
+		completed: false,
+		depends_on: ['Advanced Hacking'],
+		leads_to: [],
+		unlocks: { technique: 'Misinformation Campaigns' }
+	},
+	{
+		title: 'Advanced Cyber Operations',
+		tier: 'expert',
+		branch: 'technology',
+		description:
+			'Develop cutting-edge cyber operation strategies to secure and advance technological capabilities.',
+		cost: 18,
+		duration: 6,
+		completed: false,
+		depends_on: ['Network Infiltration', 'Advanced Hacking'],
+		leads_to: [],
+		unlocks: { facility: 'Cyber Command Center' }
+	},
+	{
 		title: 'Public Speaking Training',
 		tier: 'basic',
 		branch: 'communication',
@@ -310,5 +362,18 @@ export const researchTree = [
 		depends_on: ['Social Media Strategy'],
 		leads_to: [],
 		unlocks: { technique: 'Online Forums and Networks' }
+	},
+	{
+		title: 'Strategic Communication',
+		tier: 'expert',
+		branch: 'communication',
+		description:
+			'Master the art of strategic communication to influence public opinion at a large scale.',
+		cost: 15,
+		duration: 5,
+		completed: false,
+		depends_on: ['Crisis Communication', 'Press Release Campaign'],
+		leads_to: [],
+		unlocks: { technique: 'Strategic Messaging' }
 	}
 ];
