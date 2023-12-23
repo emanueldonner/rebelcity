@@ -106,26 +106,36 @@
 			<div>
 				<table>
 					<tbody>
-						<tr>
-							<td><strong>Description:</strong></td>
-							<td>{modalContent.description}</td>
-						</tr>
-						<tr>
-							<td><strong>Tier:</strong></td>
-							<td>{modalContent.tier}</td>
-						</tr>
-						<tr>
-							<td><strong>Branch:</strong></td>
-							<td>{modalContent.branch}</td>
-						</tr>
-						<tr>
-							<td><strong>Cost:</strong></td>
-							<td>{modalContent.cost} Research Points</td>
-						</tr>
-						<tr>
-							<td><strong>Duration:</strong></td>
-							<td>{modalContent.duration} turns</td>
-						</tr>
+						{#if modalContent.description}
+							<tr>
+								<td><strong>Description:</strong></td>
+								<td>{modalContent.description}</td>
+							</tr>
+						{/if}
+						{#if modalContent.tier}
+							<tr>
+								<td><strong>Tier:</strong></td>
+								<td>{modalContent.tier}</td>
+							</tr>
+						{/if}
+						{#if modalContent.branch}
+							<tr>
+								<td><strong>Branch:</strong></td>
+								<td>{modalContent.branch}</td>
+							</tr>
+						{/if}
+						{#if modalContent.cost}
+							<tr>
+								<td><strong>Cost:</strong></td>
+								<td>{modalContent.cost} Research Points</td>
+							</tr>
+						{/if}
+						{#if modalContent.duration}
+							<tr>
+								<td><strong>Duration:</strong></td>
+								<td>{modalContent.duration} turns</td>
+							</tr>
+						{/if}
 						<tr>
 							<td><strong>Completed:</strong></td>
 							<td>{modalContent.completed ? 'Yes' : 'No'}</td>
