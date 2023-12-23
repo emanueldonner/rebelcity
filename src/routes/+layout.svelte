@@ -4,7 +4,7 @@
 	import Logo from '../assets/rebel_city_logo.png';
 	let links = [
 		{ text: 'Map', url: '/map' },
-		{ text: 'NPCs', url: '/npcs' },
+		// { text: 'NPCs', url: '/npcs' },
 		// { text: 'Factions', url: '/factions' },
 		{ text: 'Research', url: '/research' }
 	];
