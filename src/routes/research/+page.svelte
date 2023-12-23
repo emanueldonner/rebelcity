@@ -88,7 +88,7 @@
 									}`}
 									on:mouseover={() => showProjectModal(project)}
 									on:mouseleave={hideProjectModal}
-									on:focus={() => showProjectModal(project.title)}
+									on:focus={() => showProjectModal(project)}
 								>
 									<div bind:this={projectElements[project.title]} class="project-sphere"></div>
 									<div class="title">{project.title}</div>
