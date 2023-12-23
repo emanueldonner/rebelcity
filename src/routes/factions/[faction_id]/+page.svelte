@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { npcs, attributes, factions } from '../../npc_data.js';
+	import { attributes, factions } from '../../npc_data.js';
 
 	export let data;
 
@@ -108,6 +108,8 @@
 </div>
 
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Young+Serif&display=swap');
+
 	:root {
 		--border-size: 0.5rem;
 		--border-radius: 0.6rem;

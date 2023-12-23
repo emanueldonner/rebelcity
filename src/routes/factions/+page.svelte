@@ -1,6 +1,6 @@
 <script>
 	import { npcs } from '../npc_data.js';
-	import NPCSheet from './[npc_id]/+page.svelte';
+	import NPCSheet from './[faction_id]/+page.svelte';
 	import { pushState, preloadData } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -54,8 +54,6 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		background-color: #1a1a1a;
-		height: calc(100vh - 55px);
 	}
 	.button-container {
 		display: flex;
