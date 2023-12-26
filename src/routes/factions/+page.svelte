@@ -1,92 +1,87 @@
 <script>
-	import { npcs } from '../npc_data.js';
-	import NPCSheet from './[faction_id]/+page.svelte';
-	import { pushState, preloadData } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { factions } from '$lib/factions.js';
+	import 'iconify-icon';
 
-	let currentIndex = 0;
-	let isBackDisabled = true;
-	let isForwardDisabled = false;
-
-	const onLinkClick = async (id) => {
-		const link = `/npcs/${id}`;
-		console.log(link);
-		const result = await preloadData(link);
-		if (result.type === 'loaded' && result.status === 200) {
-			pushState(link, { selected: id });
-		} else {
-			// something bad happened! try navigating
-			goto(link);
-		}
-	};
-
-	const goBack = () => {
-		currentIndex--;
-		isForwardDisabled = false;
-		if (currentIndex === 0) {
-			isBackDisabled = true;
-		}
-		onLinkClick(npcs[currentIndex].id);
-	};
-
-	const goForward = () => {
-		currentIndex++;
-		isBackDisabled = false;
-		if (currentIndex === npcs.length - 1) {
-			isForwardDisabled = true;
-		}
-		onLinkClick(npcs[currentIndex].id);
-	};
+	function onFactionClick(faction) {
+		console.log('Faction clicked:', faction.title);
+	}
 </script>
 
-<div class="main-container">
-	<div class="button-container">
-		<button class="button back-button" on:click={goBack} disabled={isBackDisabled}></button>
-		<button class="button forward-button" on:click={goForward} disabled={isForwardDisabled}
-		></button>
-	</div>
-	<NPCSheet data={$page.state.selected} />
+<h1 class="title">Factions</h1>
+<div class="factions-container">
+	{#each factions as faction}
+		<!-- svelte-ignore a11y-interactive-supports-focus -->
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div class="faction" on:click={() => onFactionClick(faction)} role="button">
+			<iconify-icon class="icon" icon={faction.icon} alt={faction.title} />
+			<h2 class="faction-title" style="color: {faction.primaryColor};">{faction.title}</h2>
+			<p class="description">{faction.description}</p>
+			<p class="benefits"><strong>Benefits:</strong> {faction.benefits}</p>
+			<ul class="sub-factions">
+				{#each faction.subFactions as subFaction}
+					<li>{subFaction.title}</li>
+				{/each}
+			</ul>
+		</div>
+	{/each}
 </div>
 
 <style>
-	.main-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-	.button-container {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
-		width: 150px;
-		margin-top: 1rem;
-	}
-	.button {
-		background-color: transparent;
+	@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
-		color: white;
+	.title {
+		text-align: center;
+		font-family: 'Roboto', sans-serif;
+		font-weight: 500;
+		margin: 1rem 0;
+		font-size: 2rem;
+	}
+
+	.factions-container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.5rem;
+		padding: 1rem;
+	}
+
+	.faction {
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		padding: 1.5rem;
+		transition: box-shadow 0.3s ease-in-out;
+		text-align: center;
+		width: 360px;
+	}
+
+	.faction:hover {
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.icon {
+		font-size: 3rem;
+		color: inherit; /* Inherits color from parent */
+	}
+
+	.faction-title {
+		margin: 0.5rem 0;
+		font-weight: 500;
+	}
+
+	.description,
+	.benefits {
+		margin: 0.5rem 0;
+		font-size: 0.9rem;
+	}
+
+	.sub-factions {
+		list-style: none;
 		padding: 0;
-		height: 50px;
-		width: 50px;
-		border: none;
-		border-radius: 5px;
-		margin: 0px;
-		cursor: pointer;
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: contain;
+		margin: 1rem 0;
 	}
-	.button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-	.back-button {
-		background-image: url(../assets/avatars/arrow_left.png);
-	}
-	.forward-button {
-		background-image: url(../assets/avatars/arrow_left.png);
-		transform: rotate(180deg);
+
+	.sub-factions li {
+		margin: 0.3rem 0;
+		font-size: 0.8rem;
 	}
 </style>
