@@ -5,7 +5,7 @@
 	let links = [
 		{ text: 'Map', url: '/map' },
 		// { text: 'NPCs', url: '/npcs' },
-		// { text: 'Factions', url: '/factions' },
+		{ text: 'Factions', url: '/factions' },
 		{ text: 'Research', url: '/research' }
 	];
 </script>
