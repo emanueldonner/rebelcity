@@ -125,7 +125,7 @@ export const researchTree = [
 		duration: 2,
 		completed: true,
 		leads_to: ['Advanced First Aid', 'Safehouse Security'],
-		unlocks: {}
+		unlocks: { item: 'Lock Picks' }
 	},
 	{
 		title: 'Advanced First Aid',
@@ -137,7 +137,7 @@ export const researchTree = [
 		duration: 3,
 		completed: false,
 		leads_to: ['Emergency Medical Response'],
-		unlocks: { item: 'Field Medicine Kit' }
+		unlocks: { item: 'First Aid Kits' }
 	},
 	{
 		title: 'Safehouse Security',
@@ -173,7 +173,7 @@ export const researchTree = [
 		duration: 4,
 		completed: false,
 		leads_to: [],
-		unlocks: { technique: 'Stealth Operations' }
+		unlocks: { technique: 'Stealth Operations', item: 'Stealth Wearables' }
 	},
 	{
 		title: 'Urban Resilience Mastery',
@@ -198,7 +198,7 @@ export const researchTree = [
 		completed: false,
 		depends_on: [],
 		leads_to: ['Cybersecurity', 'Secure Communication'],
-		unlocks: {}
+		unlocks: { item: 'Hacking Tools' }
 	},
 	{
 		title: 'Cybersecurity',
@@ -210,7 +210,7 @@ export const researchTree = [
 		completed: false,
 		depends_on: ['Basic Encryption Techniques'],
 		leads_to: ['Advanced Hacking'],
-		unlocks: { technique: 'Data Encryption' }
+		unlocks: { technique: 'Data Encryption', item: 'Signal Jammers' }
 	},
 	{
 		title: 'Secure Communication',
@@ -222,7 +222,7 @@ export const researchTree = [
 		completed: false,
 		depends_on: ['Basic Encryption Techniques'],
 		leads_to: ['Network Infiltration'],
-		unlocks: { item: 'Encrypted Communication Devices' }
+		unlocks: { item: 'Encryption Devices' }
 	},
 	{
 		title: 'Advanced Hacking',
@@ -246,7 +246,7 @@ export const researchTree = [
 		completed: false,
 		depends_on: ['Secure Communication'],
 		leads_to: [],
-		unlocks: { event: 'Data Leak Operations' }
+		unlocks: { event: 'Data Leak Operations', item: 'Surveillance Drones' }
 	},
 	{
 		title: 'Digital Counterintelligence',

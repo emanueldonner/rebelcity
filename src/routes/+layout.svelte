@@ -6,6 +6,7 @@
 		{ text: 'Map', url: '/map' },
 		// { text: 'NPCs', url: '/npcs' },
 		{ text: 'Factions', url: '/factions' },
+		{ text: 'Equipment', url: '/equipment' },
 		{ text: 'Research', url: '/research' }
 	];
 </script>

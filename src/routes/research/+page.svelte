@@ -276,7 +276,7 @@
 <style>
 	.main-container {
 		font-family: 'Young Serif', serif;
-		background-color: #1a1a1a;
+		background-color: #121212;
 
 		padding-top: 1rem;
 		color: #ccc;
