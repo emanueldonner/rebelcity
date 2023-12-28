@@ -39,10 +39,10 @@ export const equipment = [
 
 	// Infiltration & Access
 	{
-		id: 'breaching-tools',
-		name: 'Breaching Tools',
-		description: 'Equipment for forced entry, including rams and breaching shotguns.',
-		categories: ['infiltration-access']
+		id: 'hacking-tools',
+		name: 'Hacking Tools',
+		description: 'Tools for gaining access to computer systems.',
+		categories: ['recon-surveillance', 'infiltration-access', 'protection-defense']
 	},
 	{
 		id: 'lock-picking-sets',
@@ -80,7 +80,7 @@ export const equipment = [
 		id: 'stealth-footwear',
 		name: 'Stealth Footwear',
 		description: 'Shoes designed for quiet movement, maintaining stealth.',
-		categories: ['protection-defense']
+		categories: ['infiltration-access', 'protection-defense']
 	},
 	{
 		id: 'ballistic-helmets',
